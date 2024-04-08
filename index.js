@@ -28,8 +28,22 @@ const data =
 app.use(express.json())
 
 app.get("/api/persons", (req, res) => {
-  console.log("received request, sending back data...")
-  res.send(data)
+  res.json(data)
+})
+
+app.get("/api/persons/:id", (req, res) => {
+  console.log("retrieving info of person...")
+  const id = Number(req.params.id)
+  console.log(id)
+  const person = data.find(p => p.id === id)
+  console.log(person)
+
+  if (person) {
+    res.json(person)
+  } else {
+    res.status(404).end()
+  }
+  
 })
 
 app.get("/info", (req, res) => {
