@@ -1,0 +1,27 @@
+{
+  "name": "fullstackopen-part3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laemoi/fullstackopen-part3.git"
+  },
+  "author": "Lassi Oinas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laemoi/fullstackopen-part3/issues"
+  },
+  "homepage": "https://github.com/laemoi/fullstackopen-part3#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
