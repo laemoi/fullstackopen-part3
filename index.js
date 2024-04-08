@@ -33,10 +33,22 @@ app.get("/api/persons", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const person = req.body
-  person.id = Math.floor(Math.random() * 100000)
-  data = data.concat(person)
+  if (!person.name) {
+    res.status(400).json({ error: "Name is missing" })
+  }
+  else if (!person.number) {
+    res.status(400).json({ error: "Number is missing" })
+  }
+  else if (data.map(p => p.name).includes(person.name)) {
+    res.status(400).json({ error: "A person with this name is already in the phonebook" })
+  }
+  else {
+    person.id = Math.floor(Math.random() * 100000)
+    data = data.concat(person)
 
-  res.json(person)
+    res.json(person)
+  }
+
 })
 
 app.get("/api/persons/:id", (req, res) => {
@@ -54,18 +66,22 @@ app.get("/api/persons/:id", (req, res) => {
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id)
   data = data.filter(p => p.id !== id)
+
   res.status(204).end()
+
 })
 
 app.get("/info", (req, res) => {
   const date = Date()
   const ppl = data.length
+
   res.send(
     `
       <p>Phonebook has info for ${ppl} people</p>
       <p>${date}</p>
     `
   )
+
 })
 
 const PORT = 3001
