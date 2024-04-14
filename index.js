@@ -29,6 +29,7 @@ let data =
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static("dist"))
 const body = morgan.token("body", (req) => {
   return JSON.stringify(req.body)
 })
