@@ -46,23 +46,20 @@ app.get("/api/persons", (req, res) => {
 })
 
 app.post("/api/persons", (req, res) => {
-  const person = req.body
-  if (!person.name) {
+  const body = req.body
+  if (!body.name) {
     res.status(400).json({ error: "Name is missing" })
   }
-  else if (!person.number) {
+  else if (!body.number) {
     res.status(400).json({ error: "Number is missing" })
   }
-  else if (data.map(p => p.name).includes(person.name)) {
-    res.status(400).json({ error: "A person with this name is already in the phonebook" })
-  }
   else {
-    person.id = Math.floor(Math.random() * 100000)
-    data = data.concat(person)
-
-    res.json(person)
+    const person = new Person({
+      name: body.name,
+      number: body.number
+    })
+    person.save().then(savedPerson => res.json(savedPerson))
   }
-
 })
 
 app.get("/api/persons/:id", (req, res) => {
