@@ -112,7 +112,7 @@ const App = () => {
   }
 
   const handleRemove = (event) => {
-    const id = Number(event.target.id)
+    const id = event.target.id
     const name = event.target.value
     if (window.confirm(`Delete ${name}?`)) {
       personService.remove(id)
