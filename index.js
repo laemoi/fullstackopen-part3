@@ -100,9 +100,12 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.get("/info", (req, res) => {
+app.get("/info", async (req, res) => {
   const date = Date()
-  const ppl = data.length
+  let ppl
+  await Person
+    .find({})
+    .then(people => ppl = people.length)
 
   res.send(
     `
@@ -110,7 +113,6 @@ app.get("/info", (req, res) => {
       <p>${date}</p>
     `
   )
-
 })
 
 const unknownEndpoint = (req, res) => {
