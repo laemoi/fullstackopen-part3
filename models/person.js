@@ -10,7 +10,15 @@ const personSchema = new mongoose.Schema({
     minLength: 3,
     required: true
   },
-  number: String,
+  number: {
+    type: String,
+    validate: {
+      validator: s => /^\d{2,3}-\d+$/.test(s),
+      message: props => `${props.value} does not have the correct format!`
+    },
+    minLength: 8,
+    required: true
+  }
 })
 
 personSchema.set("toJSON", {

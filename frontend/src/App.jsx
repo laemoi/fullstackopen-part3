@@ -85,7 +85,11 @@ const App = () => {
           })
           .catch(error => {
             setNotificationType("error")
-            setNotification(`Information of ${updatedPerson.name} has already been removed from server`)
+            if (error.response.status === 404) {
+              setNotification(`Information of ${updatedPerson.name} has already been removed from server`)
+            } else if (error.response.status === 400) {
+              setNotification(error.response.data.error)
+            }
             setTimeout(() => {
               setNotificationType("success")
               setNotification(null)
