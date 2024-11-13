@@ -1,33 +1,31 @@
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const morgan = require("morgan")
-const Person = require("./models/person.js")
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
+const morgan = require('morgan')
+const Person = require('./models/person.js')
 
 const app = express()
 
 app.use(express.json())
 app.use(cors())
-app.use(express.static("dist"))
-const body = morgan.token("body", (req) => {
-  return JSON.stringify(req.body)
-})
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"))
+app.use(express.static('dist'))
+morgan.token('body', (req) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
-app.get("/api/persons", (req, res) => {
+app.get('/api/persons', (req, res) => {
   Person
     .find({})
     .then(people => res.json(people))
 })
 
-app.post("/api/persons", (req, res, next) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body
   if (!body.name) {
-    res.status(400).json({ error: "Name is missing" })
+    res.status(400).json({ error: 'Name is missing' })
   }
   else if (!body.number) {
-    res.status(400).json({ error: "Number is missing" })
+    res.status(400).json({ error: 'Number is missing' })
   }
   else {
     const person = new Person({
@@ -41,19 +39,19 @@ app.post("/api/persons", (req, res, next) => {
   }
 })
 
-app.put("/api/persons/:id", (req, res, next) => {
+app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body
   const person = {
     name: body.name,
     number: body.number
   }
   Person
-    .findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: "query" })
+    .findByIdAndUpdate(req.params.id, person, { new: true, runValidators: true, context: 'query' })
     .then(updatedPerson => res.json(updatedPerson))
     .catch(error => next(error))
 })
 
-app.get("/api/persons/:id", (req, res, next) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person
     .findById(req.params.id)
     .then(person => {
@@ -66,7 +64,7 @@ app.get("/api/persons/:id", (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.delete("/api/persons/:id", (req, res, next) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person
     .findByIdAndDelete(req.params.id)
     .then(person => {
@@ -79,7 +77,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.get("/info", async (req, res) => {
+app.get('/info', async (req, res) => {
   const date = Date()
   let ppl
   await Person
@@ -95,15 +93,15 @@ app.get("/info", async (req, res) => {
 })
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: "Unknown endpoint" })
+  res.status(404).send({ error: 'Unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
 
 const errorHandler = (err, req, res, next) => {
-  if (err.name === "CastError") {
-    return res.status(400).send({ error: "Malformatted id"} )
-  } else if (err.name === "ValidationError") {
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'Malformatted id' } )
+  } else if (err.name === 'ValidationError') {
     return res.status(400).send({ error: err.message })
   }
 
